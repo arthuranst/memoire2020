@@ -1,30 +1,48 @@
+#Load des outils
 from itertools import islice
 from math import ceil
-
 from datetime import datetime
 
+#Load de InstaLoader : https://instaloader.github.io
 from instaloader import Profile, Instaloader
 
-USERSPROFILE = 'arthuranst'
-X_percentage = 10   
+# Indiquer le nom du profil dans ''
+USERSPROFILE = 'inijedar'
 
-L = Instaloader(dirname_pattern="/Users/arthuranst/Desktop/memoire/DL-PATH")
-# You're initializing the Instaloader class here with your dirname_pattern argument
+# Indiquer le % de publications désirées
+X_percentage = 3
 
-SINCE = datetime(2020, 9, 1)
-UNTIL = datetime(2018, 9, 1)
+# Indiquer l'adresse locale d'enregistrement des fichiers
+# Créer le dossier en local et le remplacer dans l'adresse à la place de ...
+L = Instaloader(dirname_pattern="/Users/arthuranst/Desktop/memoire/DL-PATH/...")
+
+# Paramètres de dates des publications, depuis X jusqu'à X
+SINCE = datetime(2020, 2, 10)
+UNTIL = datetime(2019, 1, 10)
+
 
 profile = Profile.from_username(L.context, USERSPROFILE)
-print(profile) # <Profile arthuranst (7569736126)>
 
+# Retourne le nom du profil dans la console
+print(profile)
+
+# Triage des publications en liste
 posts_sorted_by_likes = sorted(profile.get_posts(),
                                key=lambda p: p.likes + p.comments,
                                reverse=True)
-print(posts_sorted_by_likes)  # should output the sorted list
 
+# Retourne la liste complète et triée des publications
+print(posts_sorted_by_likes)
+
+# Pour la liste retournée, récupération du % des publications les plus likes
 for post in islice(posts_sorted_by_likes, ceil(profile.mediacount * X_percentage / 100)):
+    print("4")
+
+    # Depuis X jusqu'à X
     if (post.date <= SINCE and post.date >= UNTIL):
-        #changed datetime to date here
+
+    	# Retourne la validation du téléchargement dans la console
         print('Downloading post with the caption:',post.caption)
-        # Downloading post with the caption: coloris — publication and program 
+
+        # Téléchargement
         L.download_post(post, USERSPROFILE)
